@@ -1,0 +1,302 @@
+{% extends 'front/master.html' %}
+
+{% block content %}
+        <!-- Contact card & details -->
+              <!-- Header -->
+      <header class="mb-8 text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold">Get in touch</h1>
+        <p class="mt-2 text-gray-700 max-w-2xl mx-auto">
+          Questions, custom orders, or help with an existing purchase — send us
+          a message and we'll reply within 1 business day.
+        </p>
+      </header>
+        <section
+          class="order-2 lg:order-1 lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
+        >
+          <h2 class="text-lg font-semibold mb-4">Contact details</h2>
+
+          <dl class="space-y-4 text-sm text-gray-700">
+            <div>
+              <dt class="font-medium">Email</dt>
+              <dd>
+                <a href="mailto:hello@myshop.example" class="hover:underline"
+                  >hello@myshop.example</a
+                >
+              </dd>
+            </div>
+
+            <div>
+              <dt class="font-medium">Phone</dt>
+              <dd>
+                <a href="tel:+1234567890" class="hover:underline"
+                  >+1 (234) 567-890</a
+                >
+              </dd>
+            </div>
+
+            <div>
+              <dt class="font-medium">Address</dt>
+              <dd>123 Market Street, San Jose, CA</dd>
+            </div>
+
+            <div>
+              <dt class="font-medium">Hours</dt>
+              <dd>Mon–Fri: 9:00 — 18:00 PST<br />Sat: 10:00 — 14:00 PST</dd>
+            </div>
+          </dl>
+
+          <div class="mt-6">
+            <h3 class="font-medium text-sm mb-2">Follow</h3>
+            <div class="flex items-center gap-3">
+              <a
+                class="w-9 h-9 rounded flex items-center justify-center border border-gray-200"
+                href="#"
+                aria-label="Twitter"
+                >🐦</a
+              >
+              <a
+                class="w-9 h-9 rounded flex items-center justify-center border border-gray-200"
+                href="#"
+                aria-label="Instagram"
+                >📸</a
+              >
+              <a
+                class="w-9 h-9 rounded flex items-center justify-center border border-gray-200"
+                href="#"
+                aria-label="YouTube"
+                >🎬</a
+              >
+            </div>
+          </div>
+
+          <div class="mt-6 text-xs text-gray-500">
+            Prefer phone? Call during business hours for faster support.
+          </div>
+        </section>
+
+        <!-- Contact form -->
+        <section
+          class="order-1 lg:order-2 lg:col-span-2 bg-white border border-gray-200 rounded-lg p-6 shadow-sm"
+        >
+          <h2 class="text-lg font-semibold mb-4">Send us a message</h2>
+
+          <form id="contactForm" class="space-y-4" novalidate>
+            <!-- Honeypot (hidden) -->
+            <label class="hidden" aria-hidden="true"
+              >Do not fill<input
+                type="text"
+                name="hp_field"
+                tabindex="-1"
+                autocomplete="off"
+            /></label>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-sm font-medium"
+                  >Your name</label
+                >
+                <input
+                  id="name"
+                  name="name"
+                  required
+                  type="text"
+                  class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+                />
+                <p class="mt-1 text-xs text-red-600 hidden" id="err-name">
+                  Please enter your name.
+                </p>
+              </div>
+
+              <div>
+                <label for="email" class="block text-sm font-medium"
+                  >Email</label
+                >
+                <input
+                  id="email"
+                  name="email"
+                  required
+                  type="email"
+                  class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+                />
+                <p class="mt-1 text-xs text-red-600 hidden" id="err-email">
+                  Enter a valid email.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="phone" class="block text-sm font-medium"
+                  >Phone (optional)</label
+                >
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+                />
+              </div>
+
+              <div>
+                <label for="subject" class="block text-sm font-medium"
+                  >Subject</label
+                >
+                <input
+                  id="subject"
+                  name="subject"
+                  required
+                  type="text"
+                  class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+                />
+                <p class="mt-1 text-xs text-red-600 hidden" id="err-subject">
+                  Please enter a subject.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium"
+                >Message</label
+              >
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="6"
+                class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/20"
+              ></textarea>
+              <p class="mt-1 text-xs text-red-600 hidden" id="err-message">
+                Please add a message (min 10 characters).
+              </p>
+            </div>
+
+            <div>
+              <label for="attach" class="block text-sm font-medium"
+                >Attachment (optional)</label
+              >
+              <input
+                id="attach"
+                name="attach"
+                type="file"
+                accept=".png,.jpg,.jpeg,.pdf"
+                class="mt-1 block w-full text-sm"
+              />
+              <p class="mt-1 text-xs text-gray-500">
+                Allowed: PNG, JPG, PDF — max 3MB
+              </p>
+              <p class="mt-1 text-xs text-red-600 hidden" id="err-file">
+                File too large or invalid type.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <input
+                id="subscribe"
+                name="subscribe"
+                type="checkbox"
+                class="w-4 h-4"
+              />
+              <label for="subscribe" class="text-sm"
+                >Subscribe to news & offers</label
+              >
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button
+                id="submitBtn"
+                type="submit"
+                class="px-5 py-2 rounded bg-black text-white font-medium"
+              >
+                Send message
+              </button>
+              <button
+                id="clearBtn"
+                type="button"
+                class="px-4 py-2 rounded border border-gray-300"
+              >
+                Clear
+              </button>
+
+              <div
+                id="formStatus"
+                class="ml-auto text-sm text-gray-600 hidden"
+                role="status"
+                aria-live="polite"
+              ></div>
+            </div>
+          </form>
+
+          <!-- Success -->
+          <div
+            id="successBox"
+            class="mt-6 hidden bg-gray-50 border border-gray-200 rounded p-4"
+          >
+            <div class="font-semibold">Thanks — we received your message.</div>
+            <p class="text-sm text-gray-700 mt-1">
+              We'll get back within 1 business day. If urgent, call
+              <a href="tel:+1234567890" class="hover:underline"
+                >+1 (234) 567-890</a
+              >.
+            </p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Map & FAQ -->
+      <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div
+          class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+        >
+          <!-- static map placeholder (replace with iframe or embed later) -->
+          <div
+            class="w-full h-64 bg-gray-100 flex items-center justify-center text-gray-500"
+          >
+            Map placeholder — replace with Google Maps iframe or static image
+          </div>
+
+          <div class="p-4 text-sm text-gray-700">
+            <div class="font-medium mb-2">Visit us</div>
+            <div>
+              We're by appointment for in-person shopping. Drop an email or call
+              ahead.
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <h3 class="font-semibold mb-3">Frequently asked</h3>
+
+          <div class="space-y-2">
+            <details class="border border-gray-100 rounded">
+              <summary class="px-3 py-2 cursor-pointer">
+                How long until I get a reply?
+              </summary>
+              <div class="px-3 py-2 text-sm text-gray-700">
+                We aim to reply within 1 business day (Mon–Fri).
+              </div>
+            </details>
+
+            <details class="border border-gray-100 rounded">
+              <summary class="px-3 py-2 cursor-pointer">
+                Can I return an item?
+              </summary>
+              <div class="px-3 py-2 text-sm text-gray-700">
+                Yes — we offer 30-day returns. See our Returns policy on the
+                site.
+              </div>
+            </details>
+
+            <details class="border border-gray-100 rounded">
+              <summary class="px-3 py-2 cursor-pointer">
+                Do you ship internationally?
+              </summary>
+              <div class="px-3 py-2 text-sm text-gray-700">
+                Currently we ship to the US only. International shipping coming
+                soon.
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+{% endblock %}

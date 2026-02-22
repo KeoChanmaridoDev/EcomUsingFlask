@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>My Shop — Monochrome</title>
+  </head>
+  <body class="bg-white text-black">
+    <!-- NAV -->
+    {% include 'front/share/header.html' %}
+
+    <!-- PAGE CONTENT -->
+    <main class="pt-24 max-w-7xl mx-auto px-4">
+      {% block content %} {% endblock %}
+
+      <!-- PROMO BANNER -->
+      <section class="mt-12 bg-black text-white rounded-lg p-6">
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div>
+            <h3 class="text-xl font-bold">Limited-time: 20% off sitewide</h3>
+            <p class="mt-1 text-sm opacity-90">
+              Use code <span class="font-semibold">MYSHOP20</span> at checkout.
+              Ends soon.
+            </p>
+          </div>
+          <a
+            href="#products"
+            class="inline-block px-4 py-2 rounded bg-white text-black font-semibold"
+            >Shop the deal</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    {}
+
+    <!-- CART DRAWER -->
+    <aside
+      id="cartDrawer"
+      class="fixed right-0 top-0 h-full w-96 max-w-full transform translate-x-full transition-transform z-60"
+    >
+      <div class="h-full bg-white shadow-lg flex flex-col">
+        <div class="p-4 border-b flex items-center justify-between">
+          <div class="text-lg font-semibold">Your cart</div>
+          <button id="closeCart" class="p-2 rounded hover:bg-gray-100">
+            ✕
+          </button>
+        </div>
+
+        <div id="cartItems" class="p-4 space-y-4 overflow-auto flex-1">
+          <!-- JS injected -->
+        </div>
+
+        <div class="p-4 border-t">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-sm text-gray-600">Subtotal</div>
+            <div id="cartSubtotal" class="text-lg font-semibold">$0.00</div>
+          </div>
+          <button
+            id="checkoutBtn"
+            class="w-full py-3 rounded-lg bg-black text-white font-semibold"
+          >
+            Checkout
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- QUICK VIEW MODAL -->
+    <div
+      id="quickView"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-70"
+    >
+      <div class="bg-white rounded-lg max-w-3xl w-full p-6">
+        <div class="flex items-start gap-6">
+          <img
+            id="qvImg"
+            src=""
+            alt="product"
+            class="w-40 h-40 object-cover rounded"
+          />
+          <div class="flex-1">
+            <h3 id="qvTitle" class="text-xl font-semibold"></h3>
+            <p id="qvDesc" class="mt-2 text-gray-700 text-sm"></p>
+            <div class="mt-4 font-bold" id="qvPrice"></div>
+            <div class="mt-6 flex gap-3">
+              <button id="qvAdd" class="px-4 py-2 rounded bg-black text-white">
+                Add to cart
+              </button>
+              <button id="qvClose" class="px-4 py-2 rounded border">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+      const products = JSON.parse("{{ (products or []) | tojson | safe }}");
+
+      // State
+      const state = { cart: {} };
+
+      // DOM refs
+      const productGrid = document.getElementById("productGrid");
+      const productCount = document.getElementById("productCount");
+      const cartBtn = document.getElementById("cartBtn");
+      const cartDrawer = document.getElementById("cartDrawer");
+      const closeCart = document.getElementById("closeCart");
+      const cartItemsEl = document.getElementById("cartItems");
+      const cartCount = document.getElementById("cartCount");
+      const cartSubtotal = document.getElementById("cartSubtotal");
+      const searchInput = document.getElementById("searchInput");
+      const mobileSearch = document.getElementById("mobileSearch");
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      const quickView = document.getElementById("quickView");
+      const qvImg = document.getElementById("qvImg");
+      const qvTitle = document.getElementById("qvTitle");
+      const qvDesc = document.getElementById("qvDesc");
+      const qvPrice = document.getElementById("qvPrice");
+      const qvAdd = document.getElementById("qvAdd");
+      const qvClose = document.getElementById("qvClose");
+
+      let qvCurrent = null;
+
+      // Render products
+      function renderProducts(list) {
+        productGrid.innerHTML = "";
+        list.forEach((p) => {
+          const card = document.createElement("article");
+          card.className =
+            "bg-white rounded-lg shadow group overflow-hidden flex flex-col";
+
+          card.innerHTML = `
+      <img src="${p.img}" alt="${escapeHtml(
+            p.title
+          )}" class="w-full h-44 object-cover group-hover:scale-105 transition" />
+      <div class="p-4 flex flex-col h-full">
+        <div class="flex items-start gap-3">
+          <div>
+            <h3 class="font-semibold text-sm">${escapeHtml(p.title)}</h3>
+            <div class="text-xs text-gray-500 mt-1">Fast shipping • 1 year warranty</div>
+          </div>
+          <div class="ml-auto text-black font-bold">$${p.price}</div>
+        </div>
+        <div class="mt-auto pt-4 flex gap-2">
+          <button data-id="${
+            p.id
+          }" class="addBtn flex-1 py-2 rounded bg-black text-white text-sm">Add to cart</button>
+          <button data-qv="${
+            p.id
+          }" class="qvBtn border rounded py-2 px-3 text-sm">View</button>
+        </div>
+      </div>
+    `;
+          productGrid.appendChild(card);
+        });
+
+        productCount.textContent = list.length;
+        // attach listeners
+        document.querySelectorAll(".addBtn").forEach((b) =>
+          b.addEventListener("click", (e) => {
+            const id = Number(e.currentTarget.dataset.id);
+            addToCart(id);
+          })
+        );
+        document.querySelectorAll(".qvBtn").forEach((b) =>
+          b.addEventListener("click", (e) => {
+            const id = Number(e.currentTarget.dataset.qv);
+            openQuickView(id);
+          })
+        );
+      }
+
+      function escapeHtml(s) {
+        return s
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+
+      // Cart functions
+      function addToCart(id, qty = 1) {
+        const prod = products.find((p) => p.id === id);
+        if (!prod) return;
+        state.cart[id] = (state.cart[id] || 0) + qty;
+        updateCartUI();
+        // small local feedback
+        cartBtn.classList.add("animate-[pulse_300ms_ease]");
+        setTimeout(
+          () => cartBtn.classList.remove("animate-[pulse_300ms_ease]"),
+          300
+        );
+      }
+
+      function removeFromCart(id) {
+        delete state.cart[id];
+        updateCartUI();
+      }
+
+      function changeQty(id, delta) {
+        state.cart[id] = Math.max(0, (state.cart[id] || 0) + delta);
+        if (state.cart[id] === 0) delete state.cart[id];
+        updateCartUI();
+      }
+
+      function updateCartUI() {
+        // count & subtotal
+        const ids = Object.keys(state.cart).map(Number);
+        const count = ids.reduce((s, i) => s + state.cart[i], 0);
+        const subtotal = ids.reduce(
+          (s, i) => s + state.cart[i] * products.find((p) => p.id === i).price,
+          0
+        );
+
+        cartCount.textContent = count;
+        cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+
+        // items
+        cartItemsEl.innerHTML = "";
+        if (ids.length === 0) {
+          cartItemsEl.innerHTML =
+            '<div class="text-center text-gray-500">Your cart is empty.</div>';
+        } else {
+          ids.forEach((id) => {
+            const p = products.find((x) => x.id === id);
+            const qty = state.cart[id];
+            const item = document.createElement("div");
+            item.className = "flex items-center gap-3";
+            item.innerHTML = `
+        <img src="${p.img}" alt="${escapeHtml(
+              p.title
+            )}" class="w-14 h-14 object-cover rounded" />
+        <div class="flex-1">
+          <div class="font-medium text-sm">${escapeHtml(p.title)}</div>
+          <div class="text-xs text-gray-500">$${p.price} • ${qty} pcs</div>
+          <div class="mt-2 flex items-center gap-2">
+            <button data-minus="${id}" class="px-2 py-1 border rounded text-sm">−</button>
+            <button data-plus="${id}" class="px-2 py-1 border rounded text-sm">+</button>
+            <button data-remove="${id}" class="ml-2 text-xs text-red-500">Remove</button>
+          </div>
+        </div>
+        <div class="font-semibold">$${(p.price * qty).toFixed(2)}</div>
+      `;
+            cartItemsEl.appendChild(item);
+          });
+
+          // attach listeners
+          cartItemsEl
+            .querySelectorAll("[data-plus]")
+            .forEach((b) =>
+              b.addEventListener("click", (e) =>
+                changeQty(Number(e.currentTarget.dataset.plus), 1)
+              )
+            );
+          cartItemsEl
+            .querySelectorAll("[data-minus]")
+            .forEach((b) =>
+              b.addEventListener("click", (e) =>
+                changeQty(Number(e.currentTarget.dataset.minus), -1)
+              )
+            );
+          cartItemsEl
+            .querySelectorAll("[data-remove]")
+            .forEach((b) =>
+              b.addEventListener("click", (e) =>
+                removeFromCart(Number(e.currentTarget.dataset.remove))
+              )
+            );
+        }
+      }
+
+      // Quick view
+      function openQuickView(id) {
+        const p = products.find((x) => x.id === id);
+        if (!p) return;
+        qvCurrent = p;
+        qvImg.src = p.img;
+        qvTitle.textContent = p.title;
+        qvDesc.textContent =
+          "High-quality product curated for everyday use. Fast shipping, reliable warranty.";
+        qvPrice.textContent = `$${p.price}`;
+        quickView.classList.remove("hidden");
+        quickView.classList.add("flex");
+      }
+
+      function closeQuickView() {
+        quickView.classList.add("hidden");
+        quickView.classList.remove("flex");
+        qvCurrent = null;
+      }
+
+      // Mobile menu toggle
+      mobileMenuBtn.addEventListener("click", () =>
+        mobileMenu.classList.toggle("hidden")
+      );
+      document.getElementById("searchBtn").addEventListener("click", () => {
+        const q = searchInput.value.trim().toLowerCase();
+        applySearch(q);
+      });
+      mobileSearch &&
+        mobileSearch.addEventListener("keydown", (e) => {
+          if (e.key === "Enter")
+            applySearch(e.currentTarget.value.trim().toLowerCase());
+        });
+
+      // Search helper
+      function applySearch(q) {
+        if (!q) {
+          renderProducts(products);
+          return;
+        }
+        const filtered = products.filter((p) =>
+          p.title.toLowerCase().includes(q)
+        );
+        renderProducts(filtered);
+      }
+
+      // Cart open/close
+      cartBtn.addEventListener("click", () => {
+        cartDrawer.style.transform = "translateX(0)";
+      });
+      closeCart.addEventListener("click", () => {
+        cartDrawer.style.transform = "";
+      });
+
+      // Quick view controls
+      qvClose.addEventListener("click", closeQuickView);
+      quickView.addEventListener("click", (e) => {
+        if (e.target === quickView) closeQuickView();
+      });
+      qvAdd.addEventListener("click", () => {
+        if (qvCurrent) addToCart(qvCurrent.id, 1);
+        closeQuickView();
+      });
+
+      // initial render
+      if (productGrid && productGrid.children.length === 0) {
+        renderProducts(products);
+      }
+      updateCartUI();
+
+      // basic checkout action
+      document.getElementById("checkoutBtn").addEventListener("click", () => {
+        if (Object.keys(state.cart).length === 0) {
+          alert("Your cart is empty.");
+          return;
+        }
+        alert("Checkout — implement real checkout flow in your app.");
+      });
+
+      // small helper: close mobile menu when clicking outside on larger screens
+      window.addEventListener("resize", () => {
+        if (window.innerWidth >= 768) mobileMenu.classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>

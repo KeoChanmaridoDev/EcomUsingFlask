@@ -1,0 +1,188 @@
+{% extends 'front/master.html' %}
+
+{% block content %}
+
+
+  <main class="pt-6 max-w-7xl mx-auto px-4 pb-16">
+    <!-- HERO / MISSION -->
+    <header class="bg-white rounded-lg p-8 shadow-sm">
+      <div class="lg:flex lg:items-center lg:gap-8">
+        <div class="lg:flex-1">
+          <h1 class="text-3xl md:text-4xl font-extrabold">We make everyday tech feel premium — simply.</h1>
+          <p class="mt-4 text-gray-700 max-w-2xl">
+            My Shop curates well-designed, durable electronics and essentials — chosen for value and everyday use. We focus on clarity, honest pricing, and fast support.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{{ url_for('home') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded bg-black text-white font-medium">Browse products</a>
+            <a href="#team" class="inline-flex items-center gap-2 px-5 py-3 rounded border border-gray-300">Meet the team</a>
+          </div>
+        </div>
+
+        <div class="mt-6 lg:mt-0 lg:w-96">
+          <div class="bg-gray-100 border border-gray-200 rounded-lg p-4">
+            <div class="text-sm text-gray-700">Founded</div>
+            <div class="text-2xl font-bold mt-1">2021</div>
+
+            <div class="mt-4 text-sm text-gray-700">Mission</div>
+            <div class="mt-1">Deliver practical, reliable tech that fits modern life without noise or false promises.</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- STATS -->
+    <section class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold">12k+</div>
+        <div class="text-xs text-gray-600 mt-1">Customers served</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold">4.9★</div>
+        <div class="text-xs text-gray-600 mt-1">Average rating</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold">30+</div>
+        <div class="text-xs text-gray-600 mt-1">Products curated</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-2xl font-bold">30 days</div>
+        <div class="text-xs text-gray-600 mt-1">Easy returns</div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="mt-10 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+      <h2 class="text-xl font-semibold">Our story</h2>
+      <ol class="mt-4 space-y-6">
+        <li class="flex gap-4">
+          <div class="w-12 flex-shrink-0 text-center">
+            <div class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">2021</div>
+          </div>
+          <div>
+            <div class="font-semibold">Started small</div>
+            <div class="text-sm text-gray-600">Launched as a weekend project testing handpicked accessories and headphones.</div>
+          </div>
+        </li>
+
+        <li class="flex gap-4">
+          <div class="w-12 flex-shrink-0 text-center">
+            <div class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">2022</div>
+          </div>
+          <div>
+            <div class="font-semibold">Built community</div>
+            <div class="text-sm text-gray-600">Grew an active group of customers who helped shape product choices and policies.</div>
+          </div>
+        </li>
+
+        <li class="flex gap-4">
+          <div class="w-12 flex-shrink-0 text-center">
+            <div class="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center">2024</div>
+          </div>
+          <div>
+            <div class="font-semibold">Matured operations</div>
+            <div class="text-sm text-gray-600">Improved shipping, support, and product quality checks — focusing on reliability.</div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- TEAM -->
+    <section id="team" class="mt-10">
+      <h2 class="text-xl font-semibold mb-4">Team</h2>
+      <p class="text-sm text-gray-600 mb-6">A small, focused team — designers, logistics, and people who answer your messages.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- team card -->
+        <article class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Team member" class="w-24 h-24 mx-auto rounded-full object-cover grayscale" />
+          <h3 class="mt-3 font-semibold">Sophea</h3>
+          <div class="text-xs text-gray-600">Founder & product</div>
+          <p class="text-xs text-gray-500 mt-2">Designs product selection and brand voice.</p>
+        </article>
+
+        <article class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <img src="https://cdn.dribbble.com/userupload/23067980/file/original-a04e27a716c9c3b22c35fdf64b8ab483.png?resize=400x300" alt="Team member" class="w-24 h-24 mx-auto rounded-full object-cover grayscale" />
+          <h3 class="mt-3 font-semibold">Keo</h3>
+          <div class="text-xs text-gray-600">Operations the CEO and </div>
+          <p class="text-xs text-gray-500 mt-2">Handles shipping, QA, and vendor relations.</p>
+        </article>
+
+        <article class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <img src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=400&auto=format&fit=crop" alt="Team member" class="w-24 h-24 mx-auto rounded-full object-cover grayscale" />
+          <h3 class="mt-3 font-semibold">Lucy</h3>
+          <div class="text-xs text-gray-600">Customer success</div>
+          <p class="text-xs text-gray-500 mt-2">Answers your questions and handles returns.</p>
+        </article>
+
+        <article class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <img src="https://images.unsplash.com/photo-1546456073-6712f79251bb?q=80&w=400&auto=format&fit=crop" alt="Team member" class="w-24 h-24 mx-auto rounded-full object-cover grayscale" />
+          <h3 class="mt-3 font-semibold">Arun</h3>
+          <div class="text-xs text-gray-600">Engineering</div>
+          <p class="text-xs text-gray-500 mt-2">Builds and maintains the site and tools.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="mt-10 bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+      <h2 class="text-xl font-semibold">What we believe</h2>
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 border border-gray-100 rounded">
+          <div class="font-semibold">Clarity</div>
+          <div class="text-sm text-gray-600 mt-1">Honest specs and pricing — no confusing discounts or hidden fees.</div>
+        </div>
+        <div class="p-4 border border-gray-100 rounded">
+          <div class="font-semibold">Reliability</div>
+          <div class="text-sm text-gray-600 mt-1">Products we would personally trust and use every day.</div>
+        </div>
+        <div class="p-4 border border-gray-100 rounded">
+          <div class="font-semibold">Support</div>
+          <div class="text-sm text-gray-600 mt-1">Fast replies and fair returns — people over bots whenever possible.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-10">
+      <h2 class="text-xl font-semibold mb-4">FAQ</h2>
+      <div class="space-y-3">
+        <details class="bg-white border border-gray-200 rounded p-3">
+          <summary class="font-medium cursor-pointer">Where do you ship?</summary>
+          <div class="mt-2 text-sm text-gray-600">Currently shipping across the United States. International shipping is coming soon.</div>
+        </details>
+
+        <details class="bg-white border border-gray-200 rounded p-3">
+          <summary class="font-medium cursor-pointer">What is your return policy?</summary>
+          <div class="mt-2 text-sm text-gray-600">30-day returns from delivery date — item must be in acceptable condition. See Returns page for details.</div>
+        </details>
+
+        <details class="bg-white border border-gray-200 rounded p-3">
+          <summary class="font-medium cursor-pointer">Do you offer warranties?</summary>
+          <div class="mt-2 text-sm text-gray-600">Most products include 1-year limited warranty; specifics on each product page.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="mt-10 bg-black text-white rounded-lg p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="text-lg font-semibold">Want to collaborate or sell with us?</h3>
+        <p class="text-sm text-white/85 mt-1">We're always open to partnerships — reach out and let's talk.</p>
+      </div>
+      <div class="flex gap-3">
+        <a href="#contact" class="inline-flex items-center px-5 py-3 rounded bg-white text-black font-medium">Contact us</a>
+        <a href="#team" class="inline-flex items-center px-4 py-3 rounded border border-white/20">Learn more</a>
+      </div>
+    </section>
+  </main>
+
+
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+  </script>
+{% endblock %}

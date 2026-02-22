@@ -1,0 +1,167 @@
+{% extends 'front/master.html' %}
+
+{% block content %}
+<main class="pt-28 max-w-6xl mx-auto px-4 pb-20">
+    <header class="mb-6">
+      <h1 class="text-3xl font-extrabold">Checkout</h1>
+      <p class="mt-1 text-sm text-gray-600">Complete your purchase. This demo uses a simulated payment flow — replace with a real gateway for production.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- LEFT: Forms -->
+      <section class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">Shipping details</h2>
+
+        <form id="checkoutForm" class="space-y-4" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="firstName" class="block text-sm font-medium">First name</label>
+              <input id="firstName" name="firstName" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-firstName" class="text-xs text-red-600 hidden">Required</p>
+            </div>
+
+            <div>
+              <label for="lastName" class="block text-sm font-medium">Last name</label>
+              <input id="lastName" name="lastName" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-lastName" class="text-xs text-red-600 hidden">Required</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input id="email" name="email" required type="email" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+            <p id="err-email" class="text-xs text-red-600 hidden">Enter a valid email</p>
+          </div>
+
+          <div>
+            <label for="phone" class="block text-sm font-medium">Phone (optional)</label>
+            <input id="phone" name="phone" type="tel" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+          </div>
+
+          <div>
+            <label for="address1" class="block text-sm font-medium">Address line 1</label>
+            <input id="address1" name="address1" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+            <p id="err-address1" class="text-xs text-red-600 hidden">Required</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="city" class="block text-sm font-medium">City</label>
+              <input id="city" name="city" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-city" class="text-xs text-red-600 hidden">Required</p>
+            </div>
+
+            <div>
+              <label for="state" class="block text-sm font-medium">State</label>
+              <input id="state" name="state" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-state" class="text-xs text-red-600 hidden">Required</p>
+            </div>
+
+            <div>
+              <label for="zip" class="block text-sm font-medium">ZIP</label>
+              <input id="zip" name="zip" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-zip" class="text-xs text-red-600 hidden">Required</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="shippingMethod" class="block text-sm font-medium">Shipping method</label>
+            <select id="shippingMethod" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
+              <option value="standard">Standard — 3–5 business days ($5)</option>
+              <option value="express">Express — 1–2 business days ($12)</option>
+            </select>
+          </div>
+
+          <hr class="my-4" />
+
+          <h2 class="text-lg font-semibold mb-4">Payment</h2>
+
+          <!-- NOTE: This demo uses simulated card inputs. Replace with Stripe Elements / PayPal / other gateway in production. -->
+          <div>
+            <label for="cardName" class="block text-sm font-medium">Name on card</label>
+            <input id="cardName" name="cardName" required class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+            <p id="err-cardName" class="text-xs text-red-600 hidden">Required</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="cardNumber" class="block text-sm font-medium">Card number</label>
+              <input id="cardNumber" name="cardNumber" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-cardNumber" class="text-xs text-red-600 hidden">Enter a valid card number</p>
+            </div>
+
+            <div>
+              <label for="cardExp" class="block text-sm font-medium">Expiry (MM/YY)</label>
+              <input id="cardExp" name="cardExp" inputmode="numeric" maxlength="5" placeholder="08/28" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-cardExp" class="text-xs text-red-600 hidden">Invalid expiry</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+            <div>
+              <label for="cardCvc" class="block text-sm font-medium">CVC</label>
+              <input id="cardCvc" name="cardCvc" inputmode="numeric" maxlength="4" placeholder="123" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+              <p id="err-cardCvc" class="text-xs text-red-600 hidden">Invalid CVC</p>
+            </div>
+
+            <div>
+              <label for="promo" class="block text-sm font-medium">Promo code (optional)</label>
+              <div class="flex gap-2">
+                <input id="promo" name="promo" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+                <button id="applyPromo" type="button" class="px-3 py-2 rounded border border-gray-300">Apply</button>
+              </div>
+              <p id="promoMsg" class="text-xs text-gray-600 hidden"></p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 mt-4">
+            <input id="terms" type="checkbox" class="w-4 h-4" />
+            <label for="terms" class="text-sm">I agree to the <a href="#" class="underline">terms &amp; conditions</a>.</label>
+          </div>
+          <p id="err-terms" class="text-xs text-red-600 hidden">You must agree to terms.</p>
+
+          <div class="mt-4 flex items-center gap-3">
+            <button id="placeOrder" class="px-5 py-3 rounded bg-black text-white font-semibold">Place order</button>
+            <a href="/cart" class="text-sm text-gray-700 hover:underline">Edit cart</a>
+
+            <div id="formStatus" class="ml-auto text-sm text-gray-600 hidden" role="status" aria-live="polite"></div>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- RIGHT: Order summary -->
+      <aside class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">Order summary</h2>
+
+        <div id="orderItems" class="space-y-3 mb-4">
+          <!-- injected -->
+        </div>
+
+        <div class="text-sm flex items-center justify-between text-gray-700">
+          <div>Subtotal</div>
+          <div id="subtotalText">$0.00</div>
+        </div>
+
+        <div class="text-sm flex items-center justify-between text-gray-700 mt-2">
+          <div>Tax (8%)</div>
+          <div id="taxText">$0.00</div>
+        </div>
+
+        <div class="text-sm flex items-center justify-between text-gray-700 mt-2">
+          <div>Shipping</div>
+          <div id="shipText">$0.00</div>
+        </div>
+
+        <div class="border-t border-gray-100 mt-4 pt-4 flex items-center justify-between">
+          <div class="text-sm font-medium">Total</div>
+          <div id="totalText" class="text-xl font-bold">$0.00</div>
+        </div>
+
+        <div class="mt-4 text-xs text-gray-500">
+          Payment is simulated. Replace the card inputs with your gateway (Stripe Elements, PayPal, etc.) before going live.
+        </div>
+      </aside>
+    </div>
+  </main>
+{% endblock %}

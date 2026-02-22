@@ -1,0 +1,498 @@
+{%extends 'front/master.html' %} {%block content %}
+<main class="pt-28 max-w-7xl mx-auto px-4 pb-24">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- GALLERY -->
+    <section class="lg:col-span-7">
+      <div
+        class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+      >
+        <div class="relative">
+          <img
+            id="mainImage"
+            src="{{ product.image }}"
+            alt="{{ product.title }}"
+            class="w-full h-[520px] object-contain bg-gray-50"
+          />
+          <button
+            id="openLightbox"
+            class="absolute top-3 right-3 bg-white/90 border border-gray-200 rounded px-3 py-1 text-sm hidden md:inline"
+          >
+            View
+          </button>
+        </div>
+
+        <!-- thumbnails (horizontal scroll on mobile) -->
+        <div class="p-3 border-t border-gray-100">
+          <div id="thumbs" class="flex gap-3 overflow-x-auto snap-x">
+            <!-- thumbnails injected -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STICKY PRODUCT PANEL -->
+    <aside class="lg:col-span-5">
+      <div
+        id="stickyPanel"
+        class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm lg:sticky lg:top-28"
+      >
+        <h1 id="title" class="text-2xl font-extrabold">{{ product.title }}</h1>
+        <div class="mt-2 flex items-center gap-4">
+          <div id="price" class="text-2xl font-bold">
+            ${{ '%.2f' | format(product.price) }}
+          </div>
+          <div id="rating" class="text-sm text-gray-600">
+            {{ product.rating }} ★ ({{ product.rating_count }})
+          </div>
+        </div>
+
+        <p id="short" class="mt-4 text-gray-700">
+          {{ product.description[:150] }}...
+        </p>
+
+        <!-- SKU & availability -->
+        <div class="mt-4 flex gap-4 text-sm text-gray-600">
+          <div>
+            SKU:
+            <span id="sku" class="text-black font-medium ml-1"
+              >PRD-{{ '%05d' | format(product.id) }}</span
+            >
+          </div>
+          <div
+            id="availability"
+            class="ml-auto text-sm text-green-700 font-medium"
+          >
+            In stock
+          </div>
+        </div>
+
+        <!-- variants -->
+        <form id="productForm" class="mt-6 space-y-4" onsubmit="return false;">
+          <div>
+            <div class="text-sm font-medium mb-2">Color</div>
+            <div id="colors" class="flex gap-2">
+              <!-- color swatches injected -->
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-medium mb-2">Style</div>
+            <div id="styles" class="flex gap-2">
+              <!-- style pills injected -->
+            </div>
+          </div>
+
+          <!-- quantity + CTAs -->
+          <div class="mt-3 flex items-center gap-3">
+            <div class="flex items-center border border-gray-200 rounded">
+              <button id="dec" type="button" class="px-3 py-1">−</button>
+              <input
+                id="qty"
+                type="number"
+                value="1"
+                min="1"
+                class="w-16 text-center border-l border-r border-transparent px-2 py-1"
+              />
+              <button id="inc" type="button" class="px-3 py-1">+</button>
+            </div>
+
+            <button
+              id="addBtn"
+              class="px-4 py-2 rounded bg-black text-white font-medium"
+            >
+              Add to cart
+            </button>
+            <button
+              id="buyBtn"
+              class="px-4 py-2 rounded border border-gray-300"
+            >
+              Buy now
+            </button>
+          </div>
+
+          <div id="microCopy" class="mt-3 text-sm text-gray-600">
+            Free shipping over $50 • 30-day returns • 1-year warranty
+          </div>
+        </form>
+
+        <!-- meta / share -->
+        <div class="mt-6 flex items-center gap-3 text-sm text-gray-600">
+          <div>Share</div>
+          <a class="px-2 py-1 border border-gray-200 rounded">Twitter</a>
+          <a class="px-2 py-1 border border-gray-200 rounded">Instagram</a>
+          <button
+            id="copyLink"
+            class="px-2 py-1 border border-gray-200 rounded"
+          >
+            Copy link
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- full-width related/products section -->
+    <section class="lg:col-span-12">
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          class="md:col-span-2 bg-white border border-gray-200 rounded-lg p-6"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold">Product details</h2>
+            <div class="text-sm text-gray-600">Ships in 1–2 business days</div>
+          </div>
+
+          <div class="prose prose-sm max-w-none text-gray-700">
+            <p><strong>{{ product.title }}</strong></p>
+            <p>{{ product.description }}</p>
+            <ul>
+              <li>Category: {{ product.category }}</li>
+              <li>Rating: {{ product.rating }} / 5.0</li>
+              <li>{{ product.rating_count }} customer reviews</li>
+              <li>Fast shipping available</li>
+            </ul>
+          </div>
+        </div>
+
+        <aside class="bg-white border border-gray-200 rounded-lg p-6">
+          <h3 class="font-semibold mb-3">Specs</h3>
+          <dl class="text-sm text-gray-700 space-y-2">
+            <div>
+              <dt class="font-medium">Battery</dt>
+              <dd>30 hours</dd>
+            </div>
+            <div>
+              <dt class="font-medium">ANC</dt>
+              <dd>Active noise cancellation</dd>
+            </div>
+            <div>
+              <dt class="font-medium">Weight</dt>
+              <dd>260g</dd>
+            </div>
+            <div>
+              <dt class="font-medium">Warranty</dt>
+              <dd>1 year</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+
+      <!-- Reviews -->
+      <div class="mt-8 bg-white border border-gray-200 rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold">Customer reviews</h3>
+          <div class="text-sm text-gray-600">Avg 4.8 ★ — 120 reviews</div>
+        </div>
+
+        <div id="reviews" class="space-y-4">
+          <!-- injected -->
+        </div>
+
+        <form
+          id="reviewForm"
+          class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 items-start"
+        >
+          <input
+            id="revName"
+            placeholder="Your name"
+            class="md:col-span-1 border border-gray-200 rounded px-3 py-2"
+          />
+          <textarea
+            id="revText"
+            rows="2"
+            placeholder="Write a short review"
+            class="md:col-span-2 border border-gray-200 rounded px-3 py-2"
+          ></textarea>
+          <div class="md:col-span-3 flex gap-3">
+            <button
+              id="submitReview"
+              type="button"
+              class="px-4 py-2 rounded border"
+            >
+              Submit review
+            </button>
+            <div
+              id="revStatus"
+              class="text-sm text-gray-600 hidden"
+              aria-live="polite"
+            ></div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Related -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold mb-3">You may also like</h3>
+        <div id="related" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <!-- injected -->
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- LIGHTBOX -->
+<div
+  id="lightbox"
+  class="fixed inset-0 bg-black/70 hidden items-center justify-center z-60"
+>
+  <div class="max-w-4xl w-full p-4">
+    <div class="bg-white rounded overflow-hidden">
+      <div class="flex justify-end p-2">
+        <button id="closeLightbox" class="p-2">✕</button>
+      </div>
+      <div class="p-6 flex items-center justify-center">
+        <img
+          id="lightboxImg"
+          src=""
+          alt="zoom"
+          class="w-full h-[70vh] object-contain"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Get product data from Flask backend ---
+  const PRODUCT = {
+    id: {{ product.id }},
+    title: {{ product.title | tojson | safe }},
+    price: {{ product.price }},
+    sku: "PRD-{{ '%05d' | format(product.id) }}",
+    rating: {{ product.rating }},
+    ratingCount: {{ product.rating_count }},
+    short: {{ product.description | tojson | safe }},
+    availability: true,
+    images: [
+      {{ product.image | tojson | safe }},
+      {{ product.image | tojson | safe }},
+      {{ product.image | tojson | safe }},
+      {{ product.image | tojson | safe }}
+    ],
+    colors: [{ name: "Black", hex: "#111111" }, { name: "White", hex: "#f3f3f3" }],
+    styles: ["Standard", "Travel"],
+    reviews: [
+      { name: "Customer", text: "Great product, highly recommended!", rating: 5 },
+      { name: "User", text: "Good quality and fast shipping.", rating: 4 }
+    ]
+  };
+
+  const PRODUCTS = [
+    { id:2, title:"Compact Speaker", price:59, img:"https://images.unsplash.com/photo-1585386959984-a4155222f0b4?q=80&w=800&auto=format&fit=crop" },
+    { id:4, title:"Wireless Earbuds", price:89, img:"https://images.unsplash.com/photo-1526178610472-0e7de1e5f6f7?q=80&w=800&auto=format&fit=crop" },
+    { id:5, title:"Portable Charger", price:39, img:"https://images.unsplash.com/photo-1481277542470-605612bd2d61?q=80&w=800&auto=format&fit=crop" },
+    { id:7, title:"Ergonomic Mouse", price:49, img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop" }
+  ];
+
+  const STORAGE_KEY = 'myshop_cart';
+
+  // DOM refs
+  const thumbsEl = document.getElementById('thumbs');
+  const mainImage = document.getElementById('mainImage');
+  const titleEl = document.getElementById('title');
+  const priceEl = document.getElementById('price');
+  const shortEl = document.getElementById('short');
+  const skuEl = document.getElementById('sku');
+  const availabilityEl = document.getElementById('availability');
+  const colorsEl = document.getElementById('colors');
+  const stylesEl = document.getElementById('styles');
+  const qtyInput = document.getElementById('qty');
+  const decBtn = document.getElementById('dec');
+  const incBtn = document.getElementById('inc');
+  const addBtn = document.getElementById('addBtn');
+  const buyBtn = document.getElementById('buyBtn');
+  const cartCountEl = document.getElementById('cartCount');
+  const reviewsEl = document.getElementById('reviews');
+  const relatedEl = document.getElementById('related');
+  const mobileToggle = document.getElementById('mobileToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const openLightbox = document.getElementById('openLightbox');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const closeLightbox = document.getElementById('closeLightbox');
+  const copyLinkBtn = document.getElementById('copyLink');
+
+  // Mobile menu toggle
+  mobileToggle && mobileToggle.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+  // initialize
+  function init(){
+    // populate basic info
+    titleEl.textContent = PRODUCT.title;
+    priceEl.textContent = `$${PRODUCT.price.toFixed(2)}`;
+    shortEl.textContent = PRODUCT.short;
+    skuEl.textContent = PRODUCT.sku;
+    availabilityEl.textContent = PRODUCT.availability ? 'In stock' : 'Out of stock';
+    availabilityEl.classList.toggle('text-green-700', PRODUCT.availability);
+    availabilityEl.classList.toggle('text-red-600', !PRODUCT.availability);
+
+    // thumbnails
+    thumbsEl.innerHTML = '';
+    PRODUCT.images.forEach((src, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'flex-shrink-0 w-24 h-24 rounded overflow-hidden border border-gray-100 focus:outline-none hover:scale-105 transition-transform';
+      btn.innerHTML = `<img src="${src}" alt="thumb ${i+1}" class="w-full h-full object-cover" />`;
+      btn.addEventListener('click', ()=> {
+        mainImage.src = src;
+      });
+      thumbsEl.appendChild(btn);
+    });
+
+    // open lightbox
+    openLightbox && openLightbox.addEventListener('click', ()=> {
+      lightboxImg.src = mainImage.src;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+    });
+    closeLightbox && closeLightbox.addEventListener('click', ()=> { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); } });
+
+    // colors
+    colorsEl.innerHTML = '';
+    PRODUCT.colors.forEach((c, i) => {
+      const sw = document.createElement('button');
+      sw.type = 'button';
+      sw.className = 'w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center';
+      sw.title = c.name;
+      sw.style.background = c.hex;
+      sw.dataset.value = c.name;
+      if (i === 0) sw.classList.add('ring-2','ring-black');
+      sw.addEventListener('click', ()=> {
+        colorsEl.querySelectorAll('button').forEach(b => b.classList.remove('ring-2','ring-black'));
+        sw.classList.add('ring-2','ring-black');
+      });
+      colorsEl.appendChild(sw);
+    });
+
+    // styles
+    stylesEl.innerHTML = '';
+    PRODUCT.styles.forEach((s, i) => {
+      const p = document.createElement('button');
+      p.type = 'button';
+      p.className = 'px-3 py-1 border border-gray-200 rounded text-sm';
+      p.textContent = s;
+      if (i === 0) p.classList.add('bg-black','text-white');
+      p.addEventListener('click', ()=> {
+        stylesEl.querySelectorAll('button').forEach(b => b.classList.remove('bg-black','text-white'));
+        p.classList.add('bg-black','text-white');
+      });
+      stylesEl.appendChild(p);
+    });
+
+    // qty controls
+    decBtn.addEventListener('click', ()=> qtyInput.value = Math.max(1, Number(qtyInput.value || 1) - 1));
+    incBtn.addEventListener('click', ()=> qtyInput.value = Math.max(1, Number(qtyInput.value || 1) + 1));
+
+    // add / buy actions
+    addBtn.addEventListener('click', addToCart);
+    buyBtn.addEventListener('click', buyNow);
+
+    // copy link
+    copyLinkBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        copyLinkBtn.textContent = 'Copied';
+        setTimeout(()=> copyLinkBtn.textContent = 'Copy link', 1200);
+      } catch(e){
+        copyLinkBtn.textContent = 'Copy';
+      }
+    });
+
+    // render reviews & related & cart count
+    renderReviews();
+    renderRelated();
+    updateCartCount();
+
+    // submit review
+    document.getElementById('submitReview').addEventListener('click', submitReview);
+  }
+
+  // Add to cart
+  function loadCart(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ return {}; } }
+  function saveCart(c){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(c)); } catch(e){} }
+  function addToCart(){
+    const q = Math.max(1, Number(qtyInput.value || 1));
+    const cart = loadCart();
+    cart[PRODUCT.id] = (cart[PRODUCT.id] || 0) + q;
+    saveCart(cart);
+    updateCartCount();
+    addBtn.textContent = 'Added ✓';
+    setTimeout(()=> addBtn.textContent = 'Add to cart', 900);
+  }
+  function buyNow(){
+    const q = Math.max(1, Number(qtyInput.value || 1));
+    const cart = {};
+    cart[PRODUCT.id] = q;
+    saveCart(cart);
+    updateCartCount();
+    location.href = '/checkout.html';
+  }
+  function updateCartCount(){
+    const cart = loadCart();
+    const count = Object.values(cart).reduce((s,v) => s + Number(v||0), 0);
+    if (cartCountEl) cartCountEl.textContent = count;
+  }
+
+  // Reviews
+  function renderReviews(){
+    reviewsEl.innerHTML = '';
+    PRODUCT.reviews.forEach(r => {
+      const el = document.createElement('div');
+      el.className = 'border border-gray-100 rounded p-3';
+      el.innerHTML = `<div class="flex items-center justify-between"><strong>${escape(r.name)}</strong><div class="text-sm text-gray-600">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div></div><p class="mt-2 text-gray-700 text-sm">${escape(r.text)}</p>`;
+      reviewsEl.appendChild(el);
+    });
+  }
+  function submitReview(){
+    const name = (document.getElementById('revName').value || 'Anonymous').trim();
+    const text = (document.getElementById('revText').value || '').trim();
+    const status = document.getElementById('revStatus');
+    if (!text) {
+      status.textContent = 'Please enter a review.';
+      status.classList.remove('hidden');
+      return;
+    }
+    PRODUCT.reviews.unshift({ name, text, rating: 5 });
+    document.getElementById('revName').value = '';
+    document.getElementById('revText').value = '';
+    status.textContent = 'Thanks — review added locally.';
+    status.classList.remove('hidden');
+    setTimeout(()=> status.classList.add('hidden'), 1600);
+    renderReviews();
+  }
+
+  // Related
+  function renderRelated(){
+    relatedEl.innerHTML = '';
+    PRODUCTS.forEach(p => {
+      const card = document.createElement('article');
+      card.className = 'bg-white border border-gray-100 rounded p-2 text-center';
+      card.innerHTML = `
+        <img src="${p.img}" alt="${escape(p.title)}" class="w-full h-28 object-cover rounded" />
+        <div class="mt-2 text-sm font-medium">${escape(p.title)}</div>
+        <div class="mt-1 text-xs text-gray-600">$${p.price.toFixed(2)}</div>
+        <div class="mt-2"><a href="/product-${p.id}.html" class="px-3 py-1 border rounded text-sm">View</a></div>
+      `;
+      relatedEl.appendChild(card);
+    });
+  }
+
+  // simple escape
+  function escape(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+  // keyboard: left/right to change main image
+  document.addEventListener('keydown', (e) => {
+    if (['ArrowLeft','ArrowRight'].includes(e.key)) {
+      const imgs = PRODUCT.images;
+      const cur = imgs.indexOf(mainImage.src.split('?')[0]) >= 0 ? imgs.indexOf(mainImage.src.split('?')[0]) : imgs.indexOf(mainImage.src);
+      let next = cur;
+      if (e.key === 'ArrowLeft') next = Math.max(0, (cur === -1 ? 0 : cur) - 1);
+      if (e.key === 'ArrowRight') next = Math.min(imgs.length-1, (cur === -1 ? 0 : cur) + 1);
+      mainImage.src = imgs[next];
+    }
+  });
+
+  // init on load
+  init();
+</script>
+{% endblock %}

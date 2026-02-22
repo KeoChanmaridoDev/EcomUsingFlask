@@ -1,0 +1,100 @@
+{% extends 'front/master.html' %} {% block content %}
+<!-- PRODUCTS -->
+<section id="products" class="mt-10">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-semibold">Featured products</h2>
+    <div class="text-sm text-gray-500">
+      Showing
+      <span id="productCount">{{ products|length if products else 0 }}</span>
+      items
+    </div>
+  </div>
+
+  <div
+    id="productGrid"
+    data-ssr="true"
+    class="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+  >
+    {% for product in products %}
+    <article class="bg-white rounded-lg shadow overflow-hidden flex flex-col">
+      <a
+        href="/details?id={{ product.id }}"
+        class="block w-full h-64 overflow-hidden bg-gray-100"
+      >
+        <img
+          src="{{ product.img or product.image or '' }}"
+          alt="{{ product.title }}"
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
+      </a>
+      <div class="p-3 flex flex-col">
+        <a href="/details?id={{ product.id }}" class="block">
+          <h3 class="font-semibold text-sm leading-tight truncate">
+            {{ product.title }}
+          </h3>
+        </a>
+        <div class="mt-auto pt-3 flex flex-col gap-2">
+          <div class="text-black font-bold text-base">
+            ${{ '%.2f' | format(product.price or 0) }}
+          </div>
+          <div class="flex gap-2">
+            <button
+              data-id="{{ product.id }}"
+              class="addBtn flex-1 py-2 px-3 rounded bg-black text-white text-xs font-medium hover:bg-gray-800 transition-colors"
+            >
+              Add to cart
+            </button>
+            <button
+              data-id="{{ product.id }}"
+              class="buyNowBtn flex-1 py-2 px-3 rounded bg-white border-2 border-black text-black text-xs font-medium hover:bg-gray-100 transition-colors"
+            >
+              Buy now
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  // Wait for DOM to be ready
+  document.addEventListener("DOMContentLoaded", function () {
+    // Attach event listeners to "Add to cart" buttons
+    document.querySelectorAll(".addBtn").forEach((button) => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        const productId = Number(this.dataset.id);
+        if (typeof addToCart === "function") {
+          addToCart(productId);
+          // Show feedback
+          this.textContent = "Added!";
+          this.classList.add("bg-green-600");
+          this.classList.remove("bg-black");
+          setTimeout(() => {
+            this.textContent = "Add to cart";
+            this.classList.remove("bg-green-600");
+            this.classList.add("bg-black");
+          }, 1500);
+        }
+      });
+    });
+
+    // Attach event listeners to "Buy now" buttons
+    document.querySelectorAll(".buyNowBtn").forEach((button) => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        const productId = Number(this.dataset.id);
+        if (typeof addToCart === "function") {
+          addToCart(productId);
+          // Redirect to checkout
+          setTimeout(() => {
+            window.location.href = "/checkout";
+          }, 300);
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
